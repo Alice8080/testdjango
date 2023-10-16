@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test app</title>
+</head>
+
+<body>
+    <header>Test app</header>
+    <main>
+        <h1>Adding data</h1>
+        <form method="post">
+            {% csrf_token %}
+            <h2>Add an artist</h2>
+            {{ artistForm }}
+            <input type="text" value="artist" name="type" hidden>
+            <button type="submit">Add</button>
+        </form>
+        <br>
+        <hr>
+        <br>
+        <form method="post">
+            {% csrf_token %}
+            <h2>Add album</h2>
+            {{ albumForm }}
+            <input type="text" value="album" name="type" hidden>
+            <button type="submit">Add</button>
+        </form>
+        <br>
+        <hr>
+        <br>
+        <form method="post">
+            {% csrf_token %}
+            <h2>Add track</h2>
+            {{ trackForm }}
+            <input type="text" value="track" name="type" hidden>
+            <button type="submit">Add</button>
+        </form>        
+        {% if response %} 
+            <p>{{ response }}</p>
+        {% endif %}
+    </main>
+</body>
+
+</html>
