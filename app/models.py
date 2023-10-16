@@ -13,7 +13,7 @@ class Artist(models.Model):
 
 class Album(models.Model):
     name = models.CharField('Title', max_length=300, blank=False)
-    artist = models.OneToOneField(Artist, on_delete=models.CASCADE, primary_key=True)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     year = models.PositiveSmallIntegerField('Year', blank=False)
 
     class Meta:
@@ -26,7 +26,7 @@ class Album(models.Model):
 
 class Track(models.Model):
     name = models.CharField('Title', max_length=300, blank=False)
-    album = models.OneToOneField(Album, on_delete=models.CASCADE, primary_key=True)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Track'
