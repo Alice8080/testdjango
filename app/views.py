@@ -8,7 +8,7 @@ from .models import *
 class DataView(APIView):
     def get(self, request):
         # Формирование списка словарей с данными
-        def form_list_items(album): 
+        def form_list_items(album):
             tracks = Track.objects.filter(album=album)
             tracks_names = [track.name for track in tracks]
             item = {
@@ -20,24 +20,32 @@ class DataView(APIView):
             return item
         albums = Album.objects.all()
         response = list(map(lambda album: form_list_items(album), albums))
-        
+
         # Обработка сортировки по параметру, если он передан
         sorting = self.request.GET.get('sorting')
         if sorting:
             params = sorting.split("@")
-            def sort_by(item):
-                if len(params) > 1: 
+
+            # Обработка ошибки, если в sorting передается параметр, не содержащийся в колонках ответа
+            default_sort_param = "album" # В этом случае сортировка происходит по умолчанию (по текстовому представлению)
+            if len(response) > 0 and params[0] not in response[0]: 
+                sorting = default_sort_param
+            
+            def sort_response(item):
+                if len(params) > 100:
                     # Логика, по которой вложенные поля разделяются знаком ’@’
                     # и сортировка происходит по вложенным полям
                     result = item[params[0]]
-                    for i in range(1, len(params)):
-                        result = result[params[i]]
+                    for i in range(len(params)):
+                        if params[i] in result: 
+                            result = result[params[i]]
+                        else:
+                            return result
                     return result
                 else:
                     # Логика для сортировки по текстовому представлению
                     return item[sorting]
-            response.sort(key=sort_by)
-        
+            response.sort(key=sort_response)
         return Response(response)
 
 # Представление форм на главной странице
